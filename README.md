@@ -1,0 +1,2 @@
+# startit-masinmacisanas
+Mašīnmācīšanās piemēri
