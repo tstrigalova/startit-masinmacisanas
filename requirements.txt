@@ -1,0 +1,7 @@
+pandas
+pylzma
+numpy
+matplotlib
+seaborn
+termcolor
+sklearn
