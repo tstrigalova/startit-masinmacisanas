@@ -1,5 +1,4 @@
 import pandas as pd # datu apstrāde
-import numpy as np  # darbs ar masīviem
 from termcolor import colored as cl # teksta izvade
 import matplotlib.pyplot as plt # vizualizācija
 import seaborn as sb # vizualizācija
@@ -24,8 +23,8 @@ def karstuma_karte(datne, saglabat=False):
 def sadalijuma_grafiks(datne, kolonna, saglabat=False):
     df = pd.read_csv(datne)
     sb.distplot(df[kolonna], color = 'r')
-    plt.title(kolonna.upper() + ' biežums', fontsize = 16)
-    plt.xlabel(kolonna.upper(), fontsize = 14)
+    plt.title(kolonna.capitalize() + ' biežums', fontsize = 16)
+    plt.xlabel(kolonna.capitalize(), fontsize = 14)
     plt.ylabel('Biežums', fontsize = 14)
     plt.xticks(fontsize = 12)
     plt.yticks(fontsize = 12)
@@ -34,7 +33,7 @@ def sadalijuma_grafiks(datne, kolonna, saglabat=False):
     plt.show()
 
 
-# Izkliedes grafiks
+# Izkliedes grafiks (scatter plot)
 def izkliedes_grafiks(datne, x, y, saglabat=False):
     df = pd.read_csv(datne)
     i = df.columns
@@ -54,7 +53,7 @@ datne1 = 'dati/auto_simple.csv'
 datne2 = 'dati/auto_imports.csv'
 
 karstuma_karte(datne1, True)
-# sadalijuma_grafiks(datne1, "Weight")
+# sadalijuma_grafiks(datne2, "price")
 # izkliedes_grafiks(datne1, 'Volume', 'CO2')
 # izkliedes_grafiks(datne1, 'Weight', 'CO2')
 # izkliedes_grafiks(datne1, 'Volume', 'Weight')

@@ -1,5 +1,4 @@
 import pandas as pd # datu apstrāde
-import numpy as np  # darbs ar masīviem
 from termcolor import colored as cl # teksta izvade
 
 
