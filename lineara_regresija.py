@@ -12,6 +12,7 @@ from sklearn.linear_model import Ridge # Ridge algorithm
 from sklearn.linear_model import Lasso # Lasso algorithm
 from sklearn.linear_model import BayesianRidge # Bayesian algorithm
 from sklearn.linear_model import ElasticNet # ElasticNet algorithm
+from sklearn import ensemble # Labāki algoritmi
 from sklearn.metrics import explained_variance_score as evs # evaluation metric
 from sklearn.metrics import r2_score as r2 # evaluation metric
 
@@ -47,6 +48,7 @@ def parverst_kolonnu(df, kolonna):
 
 
 def modela_kvalitate(y_test, resultats):
+    # Kvalitate virs 0.6 ir OK
     print(cl('Explained Variance Score: {}'.format(evs(y_test, resultats)), attrs = ['bold']))
     print(cl('R-Squared: {}'.format(r2(y_test, resultats)), attrs = ['bold']))
 
@@ -65,12 +67,11 @@ def ieladet_modeli(datne):
 
 
 def trenet_modeli(modelis, X_train, y_train, X_test, saglabat=None):
-    modelis = LinearRegression()
     modelis.fit(X_train, y_train)
     if saglabat:
         saglabat_modeli(saglabat, modelis)
     resultats = modelis.predict(X_test)
-    return resultats
+    return modelis, resultats
 
 
 def prognozejam_rezultatu(modelis, dati):
@@ -87,31 +88,27 @@ kol_x2 = ['wheel-base','length','engine-size','city-mpg']
 kol_y2 = 'price'
 
 # Sagatavojam datus no datnes
-X_train, X_test, y_train, y_test = sagatavot_datus(datne2, kol_x2, kol_y2)
+X_train, X_test, y_train, y_test = sagatavot_datus(datne1, kol_x1, kol_y1)
 
 
 # vienkārša lineārā regresija
 modelis = LinearRegression()
 # Citi algoritmi ko var lietot:
 # # 2. Ridge
-# ridge = Ridge(alpha = 0.5)
+# modelis = Ridge(alpha = 0.5)
 # # 3. Lasso
-# lasso = Lasso(alpha = 0.01)
+# modelis = Lasso(alpha = 0.01)
 # # 4. Bayesian
-# bayesian = BayesianRidge()
+# modelis = BayesianRidge()
 # # 5. ElasticNet
-# en = ElasticNet(alpha = 0.01)
-rezultats = trenet_modeli(modelis, X_train, y_train, X_test)
+# modelis = ElasticNet(alpha = 0.01)
+# Labāks algoritms
+# modelis = ensemble.GradientBoostingRegressor(n_estimators = 400, max_depth = 5, min_samples_split = 2, learning_rate = 0.1, loss = 'ls')
+
+modelis, rezultats = trenet_modeli(modelis, X_train, y_train, X_test)
 # # Ja gribam saglabāt modeli datnē
-# rezultats = trenet_modeli(modelis, X_train, y_train, X_test, "modelis.pickle")
+# modelis, rezultats = trenet_modeli(modelis, X_train, y_train, X_test, "modelis.pickle")
 modela_kvalitate(y_test, rezultats)
-
-print("Ielādējam modeli no datnes")
-modelis2 = ieladet_modeli("modelis.pickle")
-modelis2.fit(X_train, y_train)
-rezultats2 = modelis2.predict(X_test)
-modela_kvalitate(y_test, rezultats2)
-
 
 # Lietojam modeli, lai prognozetu rezultātu
 dati1 = [1500,1140]
@@ -119,5 +116,12 @@ dati1_rez = 105
 dati2 = [99.80,176.60,109,24]
 dati2_rez = 13950
 
-prognoze = prognozejam_rezultatu(modelis2, [dati2])
-print(prognoze, dati2_rez)
+prognoze = prognozejam_rezultatu(modelis, [dati1])
+print(prognoze, dati1_rez)
+
+# print("Ielādējam modeli no datnes")
+# modelis2 = ieladet_modeli("modelis.pickle")
+# rezultats2 = modelis2.predict(X_test)
+# modela_kvalitate(y_test, rezultats2)
+# prognoze = prognozejam_rezultatu(modelis2, [dati1])
+# print(prognoze, dati1_rez)
